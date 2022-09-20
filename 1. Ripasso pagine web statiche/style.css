@@ -47,6 +47,8 @@ img {
 .section{
   min-height:30vh;
   font-size: small;
+  justify-content: center;
+  align-items: center;
 }
 .small-text {
   font-size: small;
