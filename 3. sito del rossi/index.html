@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Instituto Tecnico Industriale Statale Rossi</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a class="navbar-item" href="">Home</a>
+        <a class="navbar-item" href="">STUDENTI</a>
+        <a class="navbar-item" href="">Genitori</a>
+        <a class="navbar-item" href="">Docenti</a>
+        <a class="navbar-item" href="">News</a>
+        <a class="navbar-item" href="">Attività</a>
+        <a class="navbar-item" href="">REGISTRO</a>
+
+        <input type="search" placeholder="Search">
+    </nav>
+    <div class="logo-section">
+        <img class="img-logos" src="assets/logorossi_PICCOLO.png">
+        <div class="text-container">
+            <h1>Istituto Tecnico Industriale Statale A.Rossi</h1>
+            <h3>scuola secondaria di secondo grado &#8211; indirizzo tecnologico</h3>
+        </div>
+        <img class="img-logos" src="assets/barra-enti.jpg">
+    </div>
+    <div class="carousel">
+
+        <div class="slide">
+            <img src="assets/carosello1.jpg" class="img">
+            <div class="carousel-text">
+                <a class="slide-title" href="">La nostra scuola</a><br>
+                <div class="date">11 Luglio 2022</div>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="assets/carosello2.jpg" class="img">
+            <div class="carousel-text">
+                <a class="slide-title" href="">Evento Mind the Gap su iniziativa di Confindustria di Vicenza</a><br>
+                <div class="date">17 Luglio 2022</div>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="assets/carosello3.jpg" class="img">
+            <div class="carousel-text">
+                <a class="slide-title" href="">Secondi alla Gara Nazionale di Meccanica</a><br>
+                <div class="date">11 Luglio 2022</div>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="assets/carosello4.jpg" class="img">
+            <div class="carousel-text">
+                <a class="slide-title" href="">Atletica, Nicola Testa entra in nazionale con la maglia azzurra</a><br>
+                <div class="date">28 Giugno 2022</div>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="assets/carosello5.jpg" class="img">
+            <div class="carousel-text">
+                <a class="slide-title" href="">Buone vacanze e buoni esami!</a><br>
+                <div class="date">17 Luglio 2022</div>
+            </div>
+        </div>
+
+        <div class="prev" onclick="plusSlides(-1)">❮</div>
+        <div class="next" onclick="plusSlides(1)">❯</div>
+        <div class="dot-container">
+            <input class="dot" onclick="currentSlide(1)" name="carousel" type="radio">
+            <input class="dot" onclick="currentSlide(2)" name="carousel" type="radio">
+            <input class="dot" onclick="currentSlide(3)" name="carousel" type="radio">
+            <input class="dot" onclick="currentSlide(4)" name="carousel" type="radio">
+            <input class="dot" onclick="currentSlide(5)" name="carousel" type="radio">
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
