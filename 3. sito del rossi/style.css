@@ -66,6 +66,7 @@ h3 {
     display: block;
     position: relative;
     margin-top: 20px;
+    margin-bottom: 60px;
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
@@ -132,4 +133,52 @@ h3 {
 }
 .active, .dot:hover {
     color: #717171;
+}
+
+/* MAIN */
+.mainpage-container{
+    position: relative;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.main-title{
+    display: block;
+    padding: 5px 0px 5px 15px;
+    margin: 0;
+
+    background-color: #385991;
+    font-size: 1.4em;
+    color: #f0f0f0;
+    font-weight: 200;
+}
+.mainpage-date{
+    font-size: 0.8em;
+    color: #385991;
+}
+/*evidenza*/
+.container-evidenza{
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    background-color: #279eb1;
+}
+.evidenza-item{
+    margin: 10px 10px;
+}
+.text-evidenza{
+    color: white;
+    font-family: 'Montserrat', Helvetica, sans-serif;
+    font-weight: lighter;
+    font-size: 1.1em;
+    text-decoration: none;
+}
+/*avvisi*/
+.avvisi-item{
+    padding: 10px 10px;
+    background-color: #279eb1;
+}
+.text-avvisi1{
+    color: #f0f0f0;
+    font-weight: 400;
+    font-size: 1.1em;
 }
