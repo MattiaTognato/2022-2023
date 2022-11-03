@@ -1,3 +1,86 @@
+<?php
+	const CONSONANTI = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y', 'Z'];
+	const MESI = ['A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T'];
+	const ALFANUMERICIPARI = ["0" => 1,"1" => 0,"2" => 5,"3" => 7,"4" => 9,"5" => 13,"6" => 15,"7" => 17,"8" => 19,"9" => 21,"A" => 1,"B" => 0,"C" => 5,"D" => 7,"E" => 9,"F" => 13,"G" => 15,"H" => 17,"I" => 19,"J" => 21,"K" => 2,"L" => 4,"M" => 18,"N" => 20,"O" => 11,"P" => 3,"Q" => 6,"R" => 8,"S" => 12,"T" => 14,"U" => 16,"V" => 10,"W" => 22,"X" => 25,"Y" => 24,"Z" => 23];
+	const ALFANUMERICIDISPARI = ["0" => 0,"1" => 1,"2" => 2,"3" => 3,"4" => 4,"5" => 5,"6" => 6,"7" => 7,"8" => 8,"9" => 9,"A" => 0,"B" => 1,"C" => 2,"D" => 3,"E" => 4,"F" => 5,"G" => 6,"H" => 7,"I" => 8,"J" => 9,"K" => 10,"L" => 11,"M" => 12,"N" => 13,"O" => 14,"P" => 15,"Q" => 16,"R" => 17,"S" => 18,"T" => 19,"U" => 20,"V" => 21,"W" => 22,"X" => 23,"Y" => 24,"Z" => 25];
+
+	function get3Consonants($s){
+		$s = strtoupper($s);
+		$consonants = "";
+		for($i = 0; $i < strlen($s); $i++){
+			// controllo per ogni carattere se e' una consonante
+			if(in_array($s[$i], CONSONANTI)){
+				//consonante
+				$consonants .= $s[$i];
+			}
+			// se raggiungo le 3 break
+			if(strlen($consonants) > 2) return $consonants;
+		}
+		for($i = 0 ; $i < strlen($s); $i++){
+			// controllo per ogni carattere se e' una vocale
+			if(!in_array($s[$i], CONSONANTI)){
+				//vocale
+				$consonants .= $s[$i];
+			}
+			// se raggiungo le 3 break
+			if(strlen($consonants) > 2) return $consonants;
+		}
+		//se non ho raggiungo le 3 aggiungi x
+		while(strlen($consonants) < 3){
+			$consonants .= 'X';
+		}
+
+		return $consonants;
+	}
+	function getMese($mese){        
+		return MESI[$mese-1];
+	}
+	function getAnno($anno){
+		$anno = trim($anno);
+		//ultime due cifre dell'anno
+		return substr($anno, -2);
+	}
+	function getGiorno($giorno, $sesso){
+		return $giorno + (40*$sesso);
+	}
+	function getChecksum($codice){
+		$somma = 0;
+
+		for($i = 0; $i < strlen($codice); $i++){
+			if ($i%2 == 0){
+				//indici pari dell'array
+				$somma += ALFANUMERICIPARI[$codice[$i]];
+			}
+			else if ($i%2 == 1){
+				//indici dispari dell'array
+				$somma += ALFANUMERICIDISPARI[$codice[$i]];
+			}
+		}
+		$resto = range('A', 'Z');
+		return $resto[$somma%26];
+	}
+	function getCodiceFiscale(){
+		$nome = $_POST["nome"];
+		$cognome = $_POST["cognome"];
+		$mese = $_POST["mese"];
+		$anno = $_POST["anno"];
+		$giorno = $_POST["giorno"];
+		$sesso = $_POST["sesso"];
+		$comune = $_POST["comune"];
+
+		$codiceFiscale = "";
+
+		$codiceFiscale .= get3Consonants($cognome);
+		$codiceFiscale .= get3Consonants($nome);
+		$codiceFiscale .= getAnno($anno);
+		$codiceFiscale .= getMese($mese);
+		$codiceFiscale .= getgiorno($giorno, $sesso);
+		$codiceFiscale .= $comune;
+		$codiceFiscale .= getChecksum($codiceFiscale);
+
+		return $codiceFiscale;
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,26 +88,32 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://cdn.tailwindcss.com"></script>
-	<title>Form php</title>
+	<title>Codice fiscale</title>
 </head>
 <body>
-	<form action="receiver.php" method="post" class="w-full max-w-lg self-center">
-  		<div class="flex flex-wrap -mx-3 mb-6">
-    		<div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-      			<label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="nome">
-        			Nome
-      			</label>
-      			<input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" type="text" name="nome">
-    		</div>
-   			<div class="w-full md:w-1/2 px-3">
+	<div class="flex flex-wrap justify-center text-center mb-12">
+		<div class="w-full lg:w-6/12 px-4">
+			<h4 class="block font-bold mb-2">Codice Fiscale</h4>
+		</div>
+	</div>
+	<div class="flex flex-wrap m-auto"></div>
+	<form method="post" class="mt-50 ml-auto mr-auto w-full max-w-lg">
+		<div class="flex flex-wrap -mx-3 mb-6">
+			<div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+				<label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="nome">
+					Nome
+				</label>
+				<input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" type="text" name="nome">
+			</div>
+			<div class="w-full md:w-1/2 px-3">
 				<label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="cognome">
 					Cognome
 				</label>
 				<input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="cognome">
-    		</div>
- 		</div>
-  		<div class="flex flex-wrap -mx-3 mb-6">
-    		<div class="w-full px-3">
+			</div>
+		</div>
+		<div class="flex flex-wrap -mx-3 mb-6">
+			<div class="w-full px-3">
 				<label for="giorno" class="text-gray-700 text-xs font-bold mb-2">
 					Giorno
 				</label>
@@ -79,13 +168,13 @@
 					<option value="12">12</option>
 				</select>
 				<label for="anno" class="text-gray-700 text-xs font-bold mb-2">
-        			Anno
-      			</label>
-      			<input name="anno" class="appearance-none bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">				
-    		</div>
-    		<div class="w-full px-3">
+					Anno
+				</label>
+				<input name="anno" class="appearance-none bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">				
+			</div>
+			<div class="w-full px-3">
 				<label for="comune" class="text-gray-700 text-xs font-bold mb-2">
-						Comune
+					Comune
 				</label>
 				<select name="comune" class="appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
 					<?php 
@@ -103,8 +192,15 @@
 				</select>
 			</div>
 		</div>
-		<button type="submit" class="text-white mt-5 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Default</button>
-  		</div>
+		<button type="submit" class="text-white mt-5 bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+		</div>
 	</form>
+	<div class="flex flex-wrap justify-center text-center mb-12">
+		<div class="w-full lg:w-6/12 px-4">
+			<h4 class="appearance-none block w-full bg-gray-200 text-gray-700 font-extrabold border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white">
+				<?php if($_POST) echo getCodiceFiscale(); ?>
+			</h4>
+		</div>
+	</div>	
 </body>
 </html>
