@@ -1,4 +1,9 @@
 <?php
+	error_reporting(-1);
+	ini_set( 'display_errors', 1 );
+	require_once'db_connect.php';
+
+
 	const CONSONANTI = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y', 'Z'];
 	const MESI = ['A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T'];
 	const ALFANUMERICIPARI = ["0" => 1,"1" => 0,"2" => 5,"3" => 7,"4" => 9,"5" => 13,"6" => 15,"7" => 17,"8" => 19,"9" => 21,"A" => 1,"B" => 0,"C" => 5,"D" => 7,"E" => 9,"F" => 13,"G" => 15,"H" => 17,"I" => 19,"J" => 21,"K" => 2,"L" => 4,"M" => 18,"N" => 20,"O" => 11,"P" => 3,"Q" => 6,"R" => 8,"S" => 12,"T" => 14,"U" => 16,"V" => 10,"W" => 22,"X" => 25,"Y" => 24,"Z" => 23];
@@ -29,7 +34,6 @@
 		while(strlen($consonants) < 3){
 			$consonants .= 'X';
 		}
-
 		return $consonants;
 	}
 	function getMese($mese){        
@@ -81,6 +85,7 @@
 		return $codiceFiscale;
 	}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,7 +203,37 @@
 	<div class="flex flex-wrap justify-center text-center mb-12">
 		<div class="w-full lg:w-6/12 px-4">
 			<h4 class="appearance-none block w-full bg-gray-200 text-gray-700 font-extrabold border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white">
-				<?php if($_POST) echo getCodiceFiscale(); ?>
+				<?php 
+				if($_POST) {
+					$codice = getCodiceFiscale();
+					
+					$sql="INSERT INTO codFiscale(`nome`, `cognome`, `giorno`, `mese`, `anno`, `comune`, `sesso`, `codiceFiscale` ) VALUES(:nome, :cognome, :giorno, :mese, :anno, :comune, :sesso, :code)";
+					$query = $db->prepare($sql);
+					
+					$query->bindParam(':nome',$_POST["nome"],PDO::PARAM_STR);
+					$query->bindParam(':cognome',$_POST["cognome"],PDO::PARAM_STR);
+					$query->bindParam(':giorno',$_POST["giorno"],PDO::PARAM_INT);
+					$query->bindParam(':mese',$_POST["mese"],PDO::PARAM_INT);
+					$query->bindParam(':anno',$_POST["anno"],PDO::PARAM_INT);
+					$query->bindParam(':comune',$_POST["comune"],PDO::PARAM_STR);
+					$query->bindParam(':sesso',$_POST["sesso"],PDO::PARAM_STR);
+					$query->bindParam(':code',$codice,PDO::PARAM_STR);
+					$query->execute();
+					
+					$lastInsertId = $db->lastInsertId();
+					if($lastInsertId)
+					{
+						echo $codice;
+						echo "<br> recorded successfully";
+					}
+					else
+					{
+						// Message for unsuccessfull insertion
+						echo "<script>alert('Something went wrong. Please try again');</script>";
+						echo "<script>window.location.href='index.php'</script>";
+					}
+				}
+				?>
 			</h4>
 		</div>
 	</div>	
