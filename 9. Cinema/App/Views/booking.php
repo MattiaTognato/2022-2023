@@ -161,57 +161,130 @@ p.text span {
     <div class="screen"></div>
     
     <div class="row">
-        <div id="0" class="seat"></div>
-        <div id="1" class="seat"></div>
-        <div id="2" class="seat"></div>
-        <div id="3" class="seat"></div>
-        <div id="4" class="seat"></div>
-        <div id="5" class="seat"></div>
-        <div id="6" class="seat"></div>
-        <div id="7" class="seat"></div>
+        <div id="0" class="<?php
+        if(!isset($seat_block[0]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="1" class="<?php
+        if(!isset($seat_block[1]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="2" class="<?php
+        if(!isset($seat_block[2]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="3" class="<?php
+        if(!isset($seat_block[3]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="4" class="<?php
+        if(!isset($seat_block[4]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="5" class="<?php
+        if(!isset($seat_block[5]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="6" class="<?php
+        if(!isset($seat_block[6]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="7" class="<?php
+        if(!isset($seat_block[7]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
       </div>
       <div class="row">
-        <div id="8" class="seat"></div>
-        <div id="9" class="seat"></div>
-        <div id="10" class="seat"></div>
-        <div id="11" class="seat occupied"></div>
-        <div id="12" class="seat occupied"></div>
-        <div id="13" class="seat"></div>
-        <div id="14" class="seat"></div>
-        <div id="15" class="seat"></div>
+        <div id="8" class="<?php
+        if(!isset($seat_block[8]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="9" class="<?php
+        if(!isset($seat_block[9]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="10" class="<?php
+        if(!isset($seat_block[10]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="11" class="<?php
+        if(!isset($seat_block[11]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="12" class="<?php
+        if(!isset($seat_block[12]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="13" class="<?php
+        if(!isset($seat_block[13]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="14" class="<?php
+        if(!isset($seat_block[14]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="15" class="<?php
+        if(!isset($seat_block[15]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
       </div>
       <div class="row">
-        <div id="16" class="seat"></div>
-        <div id="17" class="seat"></div>
-        <div id="18" class="seat"></div>
-        <div id="19" class="seat"></div>
-        <div id="20" class="seat"></div>
-        <div id="21" class="seat"></div>
-        <div id="22" class="seat occupied"></div>
-        <div id="23" class="seat occupied"></div>
+        <div id="16" class="<?php
+        if(!isset($seat_block[16]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="17" class="<?php
+        if(!isset($seat_block[17]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="18" class="<?php
+        if(!isset($seat_block[18]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="19" class="<?php
+        if(!isset($seat_block[19]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="20" class="<?php
+        if(!isset($seat_block[20]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="21" class="<?php
+        if(!isset($seat_block[21]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="22" class="<?php
+        if(!isset($seat_block[22]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
+        <div id="23" class="<?php
+        if(!isset($seat_block[23]))
+        {echo 'seat';}
+        else{echo 'seat occupied';}?>"></div>
       </div>
     
     <p class="text">
       You have selected <span id="count">0</span>
     </p>
   </div>
-  <button id="send"></button>
 </div>
-
+<button id="send">book</button>
+<a href="/index.php/home" id="home" hidden>Torna alla home</a>
 
 <script>
-    const container = document.querySelector('.container');
+const container = document.querySelector('.container');
 const seats = document.querySelectorAll('.row .seat:not(.occupied)');
 const count = document.getElementById('count');
-
+let selectedSeat = [];
 //Update total and count
 function updateSelectedCount() {
   const selectedSeats = document.querySelectorAll('.row .seat.selected');
-  selectedSeats.forEach(element => {
-    console.log(element.id);
-    });
   const selectedSeatsCount = selectedSeats.length;
   count.innerText = selectedSeatsCount;
+  selectedSeat = [];
+  selectedSeats.forEach(element => {
+      selectedSeat.push(element.id);
+    });
 }
 
 //Seat click event
@@ -223,27 +296,41 @@ container.addEventListener('click', e => {
   updateSelectedCount();
 });
 
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
 
 
 let btn = document.getElementById('send');
 // Add an event listener to the button
-btn.addEventListener('onclick', () => {
+btn.addEventListener('click', () => {
   const xhr = new XMLHttpRequest();
   xhr.open('POST', '/index.php/booking');
+  
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+  let ora = getParameterByName('ora');
+  let schedule_id = getParameterByName('schedule_id');
 
-  xhr.setRequestHeader('Content-Type', 'application/json');
-
+  xhr.setRequestHeader("Content-Type", "application/json");
   xhr.onload = () => {
-    const responseData = xhr.responseText;
+    
+    window.location.replace("home");
+  };
 
-    const div = document.createElement('div');
-
-    div.innerHTML = responseData;
-
-    document.body.appendChild(div);
-};
-
-  xhr.send();
+  let data = {
+    schedule_id: schedule_id,
+    ora: ora,
+    seat: selectedSeat
+  };
+  let json = JSON.stringify(data);
+  console.log(json);
+  xhr.send(json);
 });
 </script>
 </body>

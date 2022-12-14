@@ -33,6 +33,7 @@ class User{
         if($result){
             //salvo l'id dell'utente e lo mando alla home
             $_SESSION['userID'] = $result['id'];
+            $_SESSION['email'] = $result['email'];
             header("Location: /index.php/home");
             return;
         }
@@ -58,6 +59,7 @@ class User{
         if($result){
             //salvo l'id dell'utente e lo mando alla home
             $_SESSION['userID'] = $this->db->lastInsertId();
+            $_SESSION['email'] = $email;
             header("Location: /index.php/home");
             return;
         }
@@ -71,7 +73,8 @@ class User{
         }
     }
     function logout(){
-        $_SESSION['userID'] = null;
+        session_unset();
+        session_destroy();
         header("Location: /index.php/home");
     }
 }

@@ -26,7 +26,9 @@ try{
         ->get('/user/logout', [\App\Controllers\User::class, 'logout'])
         
         ->get('/home', [\App\Controllers\Home::class, 'index'])
-        ->get('/booking', [\App\Controllers\Booking::class, 'index']);
+        ->get('/booking', [\App\Controllers\Booking::class, 'index'])
+        ->get('/booking/user', [\App\Controllers\Booking::class, 'user_booking'])
+        ->post('/booking', [\App\Controllers\Booking::class, 'book']);
 
 
     $requestUri = str_replace("/index.php", "", $_SERVER['REQUEST_URI']);
