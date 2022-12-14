@@ -6,7 +6,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg- px-6 md:px-8 xl:px-16 py-4">
-  <div class="bg-teal-400 absolute top-0 left-0 bg-gradient-to-b from-teal-700 via-teal-500 to-teal-400 bottom-0 leading-5 h-full w-full overflow-hidden">
+  <div class="bg-teal-400 fixed top-0 left-0 bg-gradient-to-b from-teal-700 via-teal-500 to-teal-400 bottom-0 leading-5 h-full w-full overflow-hidden">
   </div>
   
   <div class="relative bg-transparent">
@@ -21,7 +21,7 @@
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="home" class="bg-teal-800 text-white px-3 py-2 rounded-md text-xl font-medium" aria-current="page">Home</a>
+              <a href="/index.php/home" class="bg-teal-800 text-white px-3 py-2 rounded-md text-xl font-medium" aria-current="page">Home</a>
               <a href="booking/user" class="<?php if(!isset($_SESSION['userID']) || $_SESSION['userID'] == null){echo 'hidden';} ?> bg-teal-800 text-white px-3 py-2 rounded-md text-xl font-medium" aria-current="page">Your Booking</a>
             </div>
           </div>
@@ -44,42 +44,25 @@
     </div>
   </nav>
 </div>
-<div class="mt-16 flex space-x-8 justify-center">
+<div class="z-10 relative grid justify-center mt-16 grid-cols-3 gap-7">
 
 <?php
 foreach($booking as $film){
-    $ore = explode(';', $film['ore']);
-    $buttonsHTML = "";
-    foreach($ore as $ora){
-      $buttonsHTML .= '<li class="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600"><div class="flex items-center pl-3">
-          <input type="radio" value="'.$ora.'" name="ora" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" require>
-          <label for="ora" class="py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">'.$ora.':00</label>
-      </div></li>';
-    }
-        
     echo 
-    '<div class="z-10 w-96 max-h-80 rounded-3xl">
-        <div class="flex max-h-80 bg-white rounded-3xl justify-center self-center p-15 z-10">
-          <img class="justify-center self-center rounded-t-lg h-96 md:h-80 md:w-48 md:rounded-none md:rounded-l-lg" src="' . $film['foto'] . '">
-          <div class="flex flex-col justify-around ml-2 p-4 leading-normal">
+    '<div class="mt-10 align-middle w-96 max-h-80 rounded-3xl">
+        <div class="max-h-80 bg-white rounded-3xl border border-teal-600 justify-center self-center p-15 z-10">
+          <div class="justify-around ml-2 p-4 leading-normal">
             <h5 class="mb-2 text-2xl font-bold break-normal  text-teal-700">' . $film['nome'] . '</h5>
-              <div class="flex justify-around">
-                <form action="/index.php/booking" method="get">
-                  <input type="hidden" name="schedule_id" value="'.$film["id"].'">
-                  <ul class="w-32 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                    '.$buttonsHTML.'
-                  </ul>
-                </form>
-                <p class="mb-3 font-normal text-white"></p>
-              </div>
+            <div class="flex justify-around">
+            <h5 class="mb-2 text-m font-bold break-normal  text-teal-700">data:' . $film['data'] . '</h5>
+            <h5 class="mb-2 text-m font-bold break-normal  text-teal-700">ora:' . $film['ora'] . '</h5>
+            <h5 class="mb-2 text-m font-bold break-normal  text-teal-700">posto:' . $film['numero_posto'] . '</h5>
             </div>
         </div>
-      </div>';  
+      </div></div>';  
 }
 ?>
 </div>
-
-  <svg class="absolute bottom-0 left-0 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#fff" fill-opacity="1" d="M0,0L40,42.7C80,85,160,171,240,197.3C320,224,400,192,480,154.7C560,117,640,75,720,74.7C800,75,880,117,960,154.7C1040,192,1120,224,1200,213.3C1280,203,1360,149,1400,122.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path></svg>
 
 </body>
 </html>

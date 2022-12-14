@@ -56,10 +56,10 @@
                                   }
                                 }
                             </script>
-                            <div class="<?php echo $errore?> flex items-center justify-between">
+                            <div class="flex items-center justify-between">
                                 <div class="text-sm ml-auto">
                                     <a href="#" class="text-red-400">
-                                        Email already registered
+                                        <?php echo $errore; ?>
                                     </a>
                                 </div>
                             </div>

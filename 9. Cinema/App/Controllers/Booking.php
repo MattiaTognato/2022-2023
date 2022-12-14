@@ -38,7 +38,16 @@ class Booking{
         http_response_code(201);
     }
     function user_booking(){
+        $stmt = $this->db->prepare(
+            'SELECT film.nome,schedule.data, booking.ora, booking.numero_posto, film.foto FROM `booking` 
+            join `schedule` on booking.schedule_id = schedule.id
+            join `film` on schedule.film_id = film.id
+
+            where booking.nome=?'
+        );
+        $stmt->execute([$_SESSION['email']]);
+        $booking = $stmt->fetchAll();
         $view = new View('yourbooking.php');
-        return $view -> render([]);
+        return $view -> render(['booking' => $booking]);
     }
 }

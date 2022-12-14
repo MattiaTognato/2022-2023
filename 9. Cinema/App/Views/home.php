@@ -5,7 +5,7 @@
   <title>Cinema App</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg- px-6 md:px-8 xl:px-16 py-4">
+<body class=" px-6 md:px-8 xl:px-16 py-4">
   <div class="bg-teal-400 absolute top-0 left-0 bg-gradient-to-b from-teal-700 via-teal-500 to-teal-400 bottom-0 leading-5 h-full w-full overflow-hidden">
   </div>
   

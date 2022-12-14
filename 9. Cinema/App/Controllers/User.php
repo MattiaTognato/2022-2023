@@ -10,7 +10,7 @@ class User{
     }
     function register_page(){
         $view = new View('registration.php');
-        $errore = 'hidden';
+        $errore = '';
         return $view -> render(['errore'=>$errore]);
     }
     function login_page(){
@@ -51,11 +51,24 @@ class User{
         $password = $_POST['pwd'];
 
         $stmt = $this->db->prepare(
+            'SELECT * from User 
+            where email=?'
+        );
+        $result = $stmt->execute([$email]); 
+        $result = $stmt->fetch();
+
+        if($result){
+            //email already exists
+            $view = new View('registration.php');
+            $errore = 'The email submitted already exists';
+            return $view -> render(['errore'=>$errore]);
+        }
+
+        $stmt = $this->db->prepare(
             'INSERT INTO User (email, pwd)
              VALUES (?, ?)'
         );
         $result = $stmt->execute([$email, $password]); 
-        $result = $stmt->fetch();
         if($result){
             //salvo l'id dell'utente e lo mando alla home
             $_SESSION['userID'] = $this->db->lastInsertId();
@@ -64,11 +77,10 @@ class User{
             return;
         }
         else{
-            echo 'errore';
             //errore nel login 
             //mostro il div della pwd sbagliata
             $view = new View('registration.php');
-            $errore = '';
+            $errore = 'database error';
             return $view -> render(['errore'=>$errore]);
         }
     }
