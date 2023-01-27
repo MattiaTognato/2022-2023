@@ -54,20 +54,9 @@ function messages_switch($text){
 			}
 
 			$response_text = "";
-			$json = '{"inline_keyboard": [[';
 			for($i = 0; $i < 10; $i++){
 				$nome = get_name($drinks[$i]);
 				$response_text .= $nome."\n";
-				$json .='{
-					"text": "'. $i .'",
-					"callback_data": "detail"
-				}';
-				if($i != 9 and $i != 4){
-					$json .= ",";
-				}
-				if($i == 5){
-					$json .= "],[";
-				}
 			}
 			$json .= ']]}';
 			require_once __DIR__.'\InlineKeyboard.php';
