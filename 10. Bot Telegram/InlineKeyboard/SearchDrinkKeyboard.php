@@ -7,12 +7,15 @@ class SearchDrinkKeyboard{
         $row1 = [];
         for($i = 1; $i <= 5; $i++){
             $drink_id = $drinks[$i-1]->id;
+            if(!isset($drink_id)){break;}
+
             $tmp = new InlineKeyboardButton($i, $drink_id);
             array_push($row1, $tmp);
         }
         $row2 = [];
         for($i = 6; $i <= 10; $i++){
             $drink_id = $drinks[$i-1]->id;
+            if(!isset($drink_id)){break;}
             $tmp = new InlineKeyboardButton($i, $drink_id);
             array_push($row2, $tmp);
         }
