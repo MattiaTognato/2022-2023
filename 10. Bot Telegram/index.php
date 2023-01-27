@@ -1,15 +1,12 @@
 <?php
 require 'vendor/autoload.php';
-require_once __DIR__.'\InlineKeyboard.php';
+require_once __DIR__.'/InlineKeyboard/SearchDrinkKeyboard.php';
+require_once __DIR__.'/Drink.php';
 use Telegram\Bot\Api;
 
 $client = new Api('5831007873:AAGm5EAwqCSgqPkKfAl-lhfH-uGHQ2yjVT0');
 
 $last_update_id=0;
-
-function get_name($drink){
-	return $drink["strDrink"];
-}
 
 function details($drink){
 	$ingredienti = [];
@@ -34,7 +31,7 @@ function messages_switch($text){
 	$json = '';
 	switch($text){
 		case "/start":
-			$response_text = 'Scrivi il nome dek drink che vuoi sdrinko sdunkare';
+			$response_text = 'Scrivi il nome del drink che vuoi sdrinko sdunkare';
 			break;
 			
 		default:
@@ -45,41 +42,26 @@ function messages_switch($text){
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$response_json = curl_exec($ch);
 			curl_close($ch);
-			$drinks = json_decode($response_json, true)["drinks"];
+			$drinks_raw = json_decode($response_json, true)["drinks"];
 			
-			if (!isset($drinks)){
+			if (!isset($drinks_raw)){
 				$response_text = 'Non ho trovato niente :(';
 				$json = '';
 				break;
 			}
 
-			$response_text = "";
-			for($i = 0; $i < 10; $i++){
-				$nome = get_name($drinks[$i]);
-				$response_text .= $nome."\n";
+			$length = count($drinks_raw);
+			$max_length = $length < 10 ? $length : 10; //max 10 drinks
+			$drinks_raw = array_slice($drinks_raw, 0, $max_length, false);
+
+			$drinks_obj = Drink::drinks_obj_from_raw($drinks_raw);
+			$response_text = "Risultati 1-10 di ". $length ."\n";
+
+			for($i = 1; $i <= $max_length; $i++){
+				$name = $drinks_obj[$i-1]->name;
+				$response_text .= "$i. $name\n\n";
 			}
-			$json .= ']]}';
-			require_once __DIR__.'\InlineKeyboard.php';
-			$json = json_encode(new InlineKeyboard());
-			var_dump($json);
-			/*$json = '{"inline_keyboard": [[{
-				"text": "asd",
-				"callback_data": "detail0"
-		},{
-				"text": "dfg",
-				"callback_data": "detail1"
-		}]]}';*/
-			var_dump($json);
-
-			/*$json = '{"inline_keyboard": [[{
-				"text": "Share with your friends",
-				"switch_inline_query": "share"
-			},{
-				"text": "🍎",
-				"callback_data": "culo"
-			}]]}';*/
-			//$response_text = details($drinks[0]);
-
+			$json = json_encode(new SearchDrinkKeyboard($drinks_obj));
 			break;
 	}
 	return [$json, $response_text];
@@ -93,10 +75,14 @@ while(true){
 		$last_update_id=$r->getUpdateId()+1;
 
 		if (isset($r->getRawResponse()["message"])){
+			//message info
 			$message = $r->getMessage();
 			$chatId = $message->getChat()->getId();
 			$text = $message->getText();
+			//elaborate response
 			[$json, $response_text] = messages_switch($text);
+			var_dump($json);
+			//send response
 			$response = $client->sendMessage([
 				'chat_id' => $chatId,
 				'text' => $response_text,
