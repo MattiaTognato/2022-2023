@@ -30,8 +30,16 @@ function messages_switch($text, $user_id, $chat_id){
 	switch($text){
 		case "/start":
 			$response_text = "/start\n\n";
-			$response_text .= "🇮🇹 Scrivi il nome di un drink per cercarlo\nfav per mostrare i drink preferiti\n";
-			$response_text .= "\n🇬🇧 Write the name of the drink you are looking for\nfav to show your favourites drink";
+			$response_text .= "🇮🇹 Scrivi il nome di un drink per cercarlo.
+Cliccando il numero associato puoi leggere i dettagli.
+Cliccando su ❤/💔, puoi aggiungere o rimuovere dai preferiti.\n";
+			$response_text .= "\n🇬🇧 Write the name of the drink you are looking for.
+Click on the button with the number of the drink to read the details of it.
+Clicking on ❤/💔, you can add or remove frome your favourites.\n";
+			$response_text .= "\nCommands:
+/start
+/fav - List of your favourite drinks
+/random - Random drink";
 			break;
 		case '/fav':
 			$favs = Favourites::where('user_id', $user_id)->get();
