@@ -15,11 +15,15 @@ class Drink{
     public $name;
     public $ingredients;
     public $image;
-
+    public $instructions;
+    public $alcholic;
     function __construct($raw_drink){
         $this->id = $raw_drink['idDrink'];
         $this->name = $raw_drink['strDrink'];
         $this->image = $raw_drink['strDrinkThumb'];
+        $this->instructions = '🇬🇧'.$raw_drink['strInstructions'];
+        $this->instructions .= $raw_drink['strInstructionsIT'] ? "\n🇮🇹" . $raw_drink['strInstructionsIT'] : ''; // add only if not null
+        $this->alcholic = $raw_drink['strAlcoholic'];
         $this->ingredients = [];
         for($i = 1; $i <= 15; $i++){
             $ingrediente = $raw_drink["strIngredient$i"];
